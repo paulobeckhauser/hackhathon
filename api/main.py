@@ -2,7 +2,7 @@ from typing import Union
 
 from fastapi import FastAPI
 
-from db_api import get_id
+from db_api import get_id, get_conn
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
