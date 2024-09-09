@@ -1,24 +1,14 @@
 import Image from "next/image";
-import { FaDotCircle } from "react-icons/fa";
 
 interface Message {
-    message: string;
-    date: string;
-    side: "left" | "right";
+    text: string;
 }
 
-export default function Message({ message, date, side }: Message) {
-
-    const color = side == "right" ? "bg-green-500" : "bg-gray-700";
-
+export default function Message({ text }: Message) {
     return (
-        <div className="my-2 mr-auto flex">
-            <div
-                className={`bg-opacity-80 rounded-lg shadow-2xl p-2 ${
-                    side == "right" && "ml-auto"
-                } ${color}`}
-            >
-                <p dangerouslySetInnerHTML={{ __html: message }} />
+        <div className="mt-10 mr-auto flex">
+            <div className={`rounded-lg p-2 w-full bg-gray-100 py-6`}>
+                <p className='text-center' dangerouslySetInnerHTML={{ __html: text }} />
             </div>
         </div>
     );
