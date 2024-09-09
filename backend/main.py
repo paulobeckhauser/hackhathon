@@ -2,6 +2,8 @@ from typing import Union
 
 from fastapi import FastAPI
 
+from db_api import get_id
+
 app = FastAPI()
 
 
@@ -10,6 +12,7 @@ def read_root():
     return {"Hello": "World"}
 
 
-@app.get("/citySearch/{item_id}")
-def read_item(item_id: int, q: Union[str, None] = None):
-    return {"item_id": item_id, "q": q}
+@app.get("/citySearch/{name}")
+def read_item(name: str):
+    return get_id(name)
+    # return {"item_id": item_id, "q": q}

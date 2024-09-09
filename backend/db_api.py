@@ -20,7 +20,8 @@ def get_id(city):
     response = requests.request("GET", url, headers=headers, data=payload)
 
     pprint(json.loads(response.text)[0]['id'])
-    return json.loads(response.text)[0]['id']
+    #return json.loads(response.text)[0]['id']
+    return response.text
 
 
 url = "https://www.bahn.de/web/api/angebote/fahrplan"
