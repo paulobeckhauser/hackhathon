@@ -5,6 +5,7 @@ import Prompt from "@/components/Prompt";
 import Header from "@/components/Header";
 import Message from "@/components/Messages/Message";
 import Search from "@/components/Search";
+import TrainCard from "@/components/Card/route";
 
 export default function Home() {
     const [fromCity, setFromCity] = useState<any>(null);
@@ -35,6 +36,7 @@ export default function Home() {
                     <div className="mt-8">
                         <Prompt onSend={handleSearch} />
                         <Message text="Hello" />
+                        <TrainCard />
                     </div>
                 </div>
             </main>
