@@ -5,6 +5,8 @@ from fastapi import FastAPI
 from db_api import get_id, get_conn
 from fastapi.middleware.cors import CORSMiddleware
 
+import json
+
 app = FastAPI()
 
 origins = ["*"]
@@ -22,8 +24,9 @@ def read_root():
     return {"Hello": "World"}
 
 @app.post("/connectionSearch/")
-def connectionSearch(station_from, station_to, datetime):
-    return get_conn(station_from, station_to, datetime)
+def connectionSearch(req):
+    l = json.loads(req.body())
+    return get_conn(l['station_from'], l['station_to'], l['datetime'])
 
 @app.get("/citySearch/{name}")
 def citySearch(name: str):
