@@ -22,6 +22,9 @@ headers = {
   'Origin': 'https://www.bahn.de'
 }
 
+def get_id_only(city):
+    return json.loads(get_id(city))[0]['id']
+
 def get_id(city):
     url = f"https://www.bahn.de/web/api/reiseloesung/orte?suchbegriff={city}&typ=ALL&limit=10"
     response = requests.request("GET", url, headers=headers, data={})

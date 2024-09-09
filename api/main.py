@@ -21,7 +21,7 @@ app.add_middleware(
 def read_root():
     return {"Hello": "World"}
 
-@app.get("/connectionSearch/{station_from}/{station_to}/{datetime}")
+@app.post("/connectionSearch/")
 def connectionSearch(station_from, station_to, datetime):
     return get_conn(station_from, station_to, datetime)
 
