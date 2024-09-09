@@ -6,10 +6,12 @@ import {
     TimeInput,
 } from "@nextui-org/react";
 import { Time } from "@internationalized/date";
-import Select from "react-select";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DBAPI from "@/api";
+import { Select } from "antd";
+
+import "./styles.css";
 
 interface SearchProps {
     fromCity: any;
@@ -34,52 +36,47 @@ export default function Search({
     classType,
     setClassType,
 }: SearchProps) {
-    const [cities, setCities] = useState([]);
+    const [cities, setCities] = useState<any[]>([]);
 
-    const cityFrom = async (e: any) => {
-        const city = e.target.value;
+    const searchFrom = async (e: any) => {
+        const data = await dbApi.getCity(e.target.value + e.key);
+        const parsedData = JSON.parse(data);
 
-        if (city.length > 2) {
-            const data = await dbApi.getCity(city);
-            setCities(data);
-        }
+        const options = parsedData.map((city: any) => ({
+            value: city.id,
+            label: city.name,
+        }));
+
+        setCities(options);
     };
 
     return (
         <>
             <Select
-                styles={{
-                    control: (baseStyles, state) => ({
-                        ...baseStyles,
-                        backgroundColor: "#f4f4f5",
-                        border: "none",
-                        borderRadius: "12px",
-                        height: "40px",
-                    }),
-                }}
-                classNamePrefix="select"
+                showSearch
+                onInputKeyDown={searchFrom}
                 placeholder="From"
-                name="from"
-                options={cities.filter((city) => city.value != toCity?.value)}
-                onChange={(e) => setFromCity(e)}
-            />
+                style={{ height: "40px" }}
+            >
+                {cities.map(({ label, value, text }, index) => (
+                    <Select.Option value={label} key={index}>
+                        {label}
+                    </Select.Option>
+                ))}
+            </Select>
 
             <Select
-                styles={{
-                    control: (baseStyles, state) => ({
-                        ...baseStyles,
-                        backgroundColor: "#f4f4f5",
-                        border: "none",
-                        borderRadius: "12px",
-                        height: "40px",
-                    }),
-                }}
-                classNamePrefix="select"
-                placeholder="Destinaton"
-                name="destination"
-                options={cities.filter((city) => city.value != fromCity?.value)}
-                onChange={(e) => setToCity(e)}
-            />
+                showSearch
+                onInputKeyDown={searchFrom}
+                placeholder="Destination"
+                style={{ height: "40px" }}
+            >
+                {cities.map(({ label, value, text }, index) => (
+                    <Select.Option value={label} key={index}>
+                        {label}
+                    </Select.Option>
+                ))}
+            </Select>
 
             <div className="flex gap-2 w-full">
                 {multipleDates ? (
