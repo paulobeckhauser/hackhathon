@@ -1,6 +1,7 @@
 from typing import Union
 
 from fastapi import FastAPI
+from pydantic import BaseModel
 
 from db_api import get_id, get_conn
 from fastapi.middleware.cors import CORSMiddleware
@@ -23,10 +24,15 @@ app.add_middleware(
 def read_root():
     return {"Hello": "World"}
 
+
+class ConnectionSearch(BaseModel):
+    frm: str
+    to: str
+    datetime: str
+
 @app.post("/connectionSearch/")
-def connectionSearch(req):
-    l = json.loads(req.body())
-    return get_conn(l['station_from'], l['station_to'], l['datetime'])
+def connectionSearch(s: ConnectionSearch):
+    return get_conn(**s.dict())
 
 @app.get("/citySearch/{name}")
 def citySearch(name: str):
