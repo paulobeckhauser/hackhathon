@@ -44,7 +44,8 @@ export default function Search({ results, setResults, setLoading }: SearchProps)
     }, []);
 
     const handleSearch = async (prompt: string) => {
-        setUserPrompt(prompt);
+        if(prompt.length > 0)
+            setUserPrompt(prompt);
         setLoading(true);
         setResults([]);
         const date = new Date(dates.year, dates.month - 1, dates.day, time.hour, time.minute, time.second, time.millisecond);
@@ -52,7 +53,8 @@ export default function Search({ results, setResults, setLoading }: SearchProps)
         const formattedDate = date.toISOString().replace(/\.\d{3}Z$/, "");
         console.log(formattedDate)
 
-        const formattedPrompt = prompt + `\nUser prefered time: ${formattedDate}`;
+        let formattedPrompt = "";
+        if(prompt) formattedPrompt = prompt + `\nUser prefered time: ${formattedDate}`;
         const response = await dbApi.searchConnections(fromCity, toCity, formattedDate, formattedPrompt);
         if (response.status != 200) {
             setLoading(false);
