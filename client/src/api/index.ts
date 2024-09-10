@@ -18,12 +18,13 @@ class DBAPI {
         }
     }
 
-    async searchConnections(from: string, to: string, date: string) {
+    async searchConnections(from: string, to: string, date: string, prompt:string) {
         try {
             const response = await axios.post(`${this._host}/connectionSearch`, {
                 frm: from,
                 to: to,
                 datetime: date,
+                prompt,
             });
 
             return response;

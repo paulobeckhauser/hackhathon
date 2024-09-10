@@ -23,6 +23,7 @@ export default function TrainCard({ route }: TrainCardProps) {
 
     const share = async () => {
         const response = await dbApi.share(verbindungsAbschnitt.abfahrtsOrt, verbindungsAbschnitt.ankunftsOrt, abfahrtsZeitpunkt.toISOString(), route.ctxRecon);
+
         const vbid = JSON.parse(response.data).vbid;
 
         window.open(`https://www.bahn.de/buchung/start?vbid=${vbid}`, "_blank");
