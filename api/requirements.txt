@@ -1,5 +1,0 @@
-fastapi[standard]
-requests
-langchain
-langchain-openai
-python-dotenv
