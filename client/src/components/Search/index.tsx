@@ -30,6 +30,8 @@ export default function Search({ results, setResults, setLoading }: SearchProps)
     const [search, setSearch] = useState<string>("");
     const [hidden, setHidden] = useState<boolean>(false);
 
+    const [userPrompt, setUserPrompt] = useState<string>("");
+
     const connections = results?.verbindungen?.length || 0;
 
     useEffect(() => {
@@ -41,13 +43,15 @@ export default function Search({ results, setResults, setLoading }: SearchProps)
     }, []);
 
     const handleSearch = async (prompt: string) => {
+        setUserPrompt(prompt);
         setLoading(true);
         setResults([]);
         const date = new Date(dates.year, dates.month - 1, dates.day, time.hour, time.minute, time.second, time.millisecond);
 
         const formattedDate = date.toISOString().replace(/\.\d{3}Z$/, "");
 
-        const response = await dbApi.searchConnections(fromCity, toCity, formattedDate, prompt);
+        const formattedPrompt = prompt + `\nUser prefered time: ${formattedDate}`;
+        const response = await dbApi.searchConnections(fromCity, toCity, formattedDate, formattedPrompt);
         if (response.status != 200) {
             setLoading(false);
             return;
@@ -95,24 +99,30 @@ export default function Search({ results, setResults, setLoading }: SearchProps)
         <>
             <div onClick={() => setHidden(false)}>
                 {hidden && (
-                    <div className=" bg-gray-200 p-6 rounded-2xl cursor-pointer">
-                        <div className="flex">
-                            <div className="">
-                                <h2 className="my-auto text-xl">Search the route</h2>
+                    <>
+                        <div className=" bg-gray-200 p-6 rounded-2xl cursor-pointer">
+                            <div className="flex">
+                                <div className="">
+                                    <h2 className="my-auto text-xl">Search the route</h2>
+                                </div>
+                                <div className="ml-auto">
+                                    <p>
+                                        <span className="font-black">{fromCity.split("@")[1].substring(2)}</span>
+                                    </p>
+                                    <p>
+                                        <span className="font-black">{toCity.split("@")[1].substring(2)}</span>
+                                    </p>
+                                </div>
                             </div>
-                            <div className="ml-auto">
-                                <p>
-                                    <span className="font-black">{fromCity.split("@")[1].substring(2)}</span>
-                                </p>
-                                <p>
-                                    <span className="font-black">{toCity.split("@")[1].substring(2)}</span>
-                                </p>
-                            </div>
+                            <small>
+                                Found <span className="font-black">{connections}</span> connections
+                            </small>
                         </div>
-                        <small>
-                            Found <span className="font-black">{connections}</span> connections
-                        </small>
-                    </div>
+                        <div className="text-center mt-2 bg-gray-100 rounded-2xl p-4">
+                            <span className="font-black">Your question:</span><br />
+                            {userPrompt}
+                        </div>
+                    </>
                 )}
                 <div className={`flex flex-col gap-2`} style={{ display: hidden ? "none" : "flex" }}>
                     <Select showSearch onInputKeyDown={handleKeyDown} placeholder="From" style={{ height: "40px" }} onChange={(e) => setFromCity(e)}>
