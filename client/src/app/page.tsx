@@ -28,16 +28,13 @@ export default function Home() {
                 {results && results?.length > 0 && (
                     <div className="mt-4 bg-gray-50">
                         <Message text="Hello" />
-                        <Recommended route={results[0]} />
+                        {/* <Recommended route={results} /> */}
                     </div>
                 )}
 
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 my-6">
-                    {results?.map((e: any) => {
-                        const o = JSON.parse(e).verbindungen;
-                        return o.map((r: any) => {
-                            return <TrainCard route={r} />;
-                        });
+                    {results?.verbindungen?.map((e: any) => {
+                        return <TrainCard route={e} />;
                     })}
                 </div>
             </main>
