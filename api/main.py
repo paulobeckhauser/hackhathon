@@ -31,7 +31,7 @@ class ShareCon(BaseModel):
 
 @app.post("/shareCon/")
 def shareCon(s: ShareCon):
-    return JSONResponse(content=share_con(**s.dict()))
+    return share_con(**s.dict())
 
 class ConnectionSearch(BaseModel):
     frm: str
@@ -46,7 +46,7 @@ def connectionSearch(s: ConnectionSearch):
         con = get_conn(**s.dict(), pagingRef=pref)
         pref = json.loads(con)['verbindungReference']['later']
         responses.append(con)
-    return JSONResponse(content=responses)
+    return json.dumps(responses)
 
 @app.get("/citySearch/{name}")
 def citySearch(name: str):
