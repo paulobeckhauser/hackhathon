@@ -48,14 +48,19 @@ def prepare_llm_json(conns):
     res = []
     id = 0
     for p in conns:
-        res.append({
-            'id': str(id),
-            'price': p['angebotsPreis']['betrag'],
-            'departure': p['verbindungsAbschnitte'][0]['halte'][0]['abfahrtsZeitpunkt'],
-            'transfers': p['umstiegsAnzahl'],
-            'duration': p['verbindungsDauerInSeconds'],
-            'sections': [{'from': s['abfahrtsOrt'], 'to': s['abfahrtsOrt']} for s in p['verbindungsAbschnitte']]
-        })
-        id += 1
+        price = 0
+        try:
+            price = p['angebotsPreis']['betrag']
+        except:
+            pass
+            res.append({
+                'id': str(id),
+                'price': price,
+                'departure': p['verbindungsAbschnitte'][0]['halte'][0]['abfahrtsZeitpunkt'],
+                'transfers': p['umstiegsAnzahl'],
+                'duration': p['verbindungsDauerInSeconds'],
+                'sections': [{'from': s['abfahrtsOrt'], 'to': s['abfahrtsOrt']} for s in p['verbindungsAbschnitte']]
+            })
+            id += 1
     # pprint(res)
     return res
