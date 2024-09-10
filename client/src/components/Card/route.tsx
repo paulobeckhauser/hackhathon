@@ -11,11 +11,11 @@ interface TrainCardProps {
 export default function TrainCard({ route, recommended }: TrainCardProps) {
     const dbApi = new DBAPI();
     
-    const connections = route?.verbindungsAbschnitte;
-    const verbindungsAbschnitt = route.verbindungsAbschnitte[0];
-    const abfahrtsZeitpunkt = new Date(verbindungsAbschnitt.abfahrtsZeitpunkt);
-    const ankunftsZeitpunkt = new Date(verbindungsAbschnitt.ankunftsZeitpunkt);
-    const duration = verbindungsAbschnitt.abschnittsDauer / 60;
+    const connections = route?.verbindungsAbschnitte || 0;
+    const verbindungsAbschnitt = route?.verbindungsAbschnitte[0];
+    const abfahrtsZeitpunkt = new Date(verbindungsAbschnitt?.abfahrtsZeitpunkt);
+    const ankunftsZeitpunkt = new Date(verbindungsAbschnitt?.ankunftsZeitpunkt);
+    const duration = verbindungsAbschnitt?.abschnittsDauer / 60;
     const price = route?.angebotsPreis?.betrag.toFixed(2) || undefined;
 
     const hasDelay = verbindungsAbschnitt.himMeldungen.some(

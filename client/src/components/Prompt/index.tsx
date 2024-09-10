@@ -32,10 +32,7 @@ export default function Prompt({ onSend }: { onSend: (text: string) => void }) {
                 value={text}
             />
             <Button
-                className={`text-white ${
-                    text.length == 0 ? "bg-gray-300 text-dark" : "bg-indigo-500"
-                }`}
-                disabled={text.length === 0}
+                className={`text-white bg-indigo-500`}
                 type="submit"
             >
                 Search

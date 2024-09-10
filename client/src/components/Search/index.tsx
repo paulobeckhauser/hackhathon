@@ -3,7 +3,7 @@ import { Button, Checkbox, DatePicker, DateRangePicker, TimeInput } from "@nextu
 import { useCallback, useEffect, useState } from "react";
 
 import DBAPI from "@/api";
-import { Select } from "antd";
+import { Divider, Select } from "antd";
 import { debounce } from "@/utils/debounce";
 import { Time } from "@internationalized/date";
 
@@ -114,12 +114,24 @@ export default function Search({ results, setResults, setLoading }: SearchProps)
                                     </p>
                                 </div>
                             </div>
-                            <small>
-                                Found <span className="font-black">{connections}</span> connections
-                            </small>
+                            <Divider className="my-4" />
+                            <div className="flex justify-between">
+                                <small className="mt-auto">
+                                    Found <span className="font-black">{connections}</span> connections
+                                </small>
+
+                                <div className="flex flex-col text-red-600 text-right">
+                                    {results?.reliability && results?.reliability?.map((e: any) => (
+                                        <div className="flex gap-2 text-right ml-auto">
+                                            <p>{e.label}: <span className="font-black">{e.percent}%</span></p>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
                         </div>
                         <div className="text-center mt-2 bg-gray-100 rounded-2xl p-4">
-                            <span className="font-black">Your question:</span><br />
+                            <span className="font-black">Your question:</span>
+                            <br />
                             {userPrompt}
                         </div>
                     </>
