@@ -29,10 +29,10 @@ def share_con(frm, to, datetime, tfID):
     url = "https://www.bahn.de/web/api/angebote/verbindung/teilen"
 
     payload = json.dumps({
-      "startOrt": {frm},
-      "zielOrt": {to},
-      "hinfahrtDatum": {datetime},
-      "hinfahrtRecon": {tfID}
+      "startOrt": frm,
+      "zielOrt": to,
+      "hinfahrtDatum": datetime,
+      "hinfahrtRecon": tfID
     })
     headers = {
       'Accept': 'application/json',
