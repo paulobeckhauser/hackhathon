@@ -55,7 +55,10 @@ def connectionSearch(s: ConnectionSearch):
     result['verbindungen'] = conns
     # temporary demo info
     if 'Düsseldorf Hbf' in s.frm and 'Frankfurt(Main)Hbf' in s.to:
-        result['reliability'] = '77% zuverlässig, 7.5% Zugausfall'
+        result['reliability'] = [
+            {'percent': '77', 'label': 'zuverlässig'},
+            {'percent': '7.5', 'label': 'Ausfall'}
+        ]
     print(json.dumps(result))
     return json.dumps(result)
 
