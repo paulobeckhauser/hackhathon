@@ -5,16 +5,17 @@ import { FaWalking } from "react-icons/fa";
 
 interface TrainCardProps {
     route: any;
+    recommended?: boolean;
 }
 
-export default function TrainCard({ route }: TrainCardProps) {
+export default function TrainCard({ route, recommended }: TrainCardProps) {
     const dbApi = new DBAPI();
     
     const connections = route?.verbindungsAbschnitte;
     const verbindungsAbschnitt = route.verbindungsAbschnitte[0];
     const abfahrtsZeitpunkt = new Date(verbindungsAbschnitt.abfahrtsZeitpunkt);
     const ankunftsZeitpunkt = new Date(verbindungsAbschnitt.ankunftsZeitpunkt);
-    const duration = verbindungsAbschnitt.abschnittsDauer / 60; // convert seconds to minutes
+    const duration = verbindungsAbschnitt.abschnittsDauer / 60;
     const price = route?.angebotsPreis?.betrag.toFixed(2) || undefined;
 
     const hasDelay = verbindungsAbschnitt.himMeldungen.some(
@@ -31,7 +32,7 @@ export default function TrainCard({ route }: TrainCardProps) {
 
     return (
         <div className="flex justify-center items-center">
-            <Card className="w-[360px] min-h-[400px]">
+            <Card className={`w-[360px] min-h-[400px] ${recommended && "bg-blue-100 shadow-2xl"}`} >
                 {/* Header Section */}
                 <div className="p-4 border-b">
                     <div className="flex justify-between">
