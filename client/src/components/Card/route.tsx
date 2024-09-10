@@ -9,8 +9,8 @@ interface TrainCardProps {
 
 export default function TrainCard({ route }: TrainCardProps) {
     const dbApi = new DBAPI();
-
-    const connections = route.verbindungsAbschnitte;
+    
+    const connections = route?.verbindungsAbschnitte;
     const verbindungsAbschnitt = route.verbindungsAbschnitte[0];
     const abfahrtsZeitpunkt = new Date(verbindungsAbschnitt.abfahrtsZeitpunkt);
     const ankunftsZeitpunkt = new Date(verbindungsAbschnitt.ankunftsZeitpunkt);
@@ -22,12 +22,7 @@ export default function TrainCard({ route }: TrainCardProps) {
     );
 
     const share = async () => {
-        console.log("Share clicked");
-
-        console.log(verbindungsAbschnitt.abfahrtsOrt, verbindungsAbschnitt.ankunftsOrt, abfahrtsZeitpunkt.toISOString(), route.ctxRecon);
-
         const response = await dbApi.share(verbindungsAbschnitt.abfahrtsOrt, verbindungsAbschnitt.ankunftsOrt, abfahrtsZeitpunkt.toISOString(), route.ctxRecon);
-
         const vbid = JSON.parse(response.data).vbid;
 
         window.open(`https://www.bahn.de/buchung/start?vbid=${vbid}`, "_blank");

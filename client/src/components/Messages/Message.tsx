@@ -6,7 +6,7 @@ interface Message {
 
 export default function Message({ text }: Message) {
     return (
-        <div className="mt-10 mr-auto flex">
+        <div className="flex">
             <div className={`rounded-lg p-2 w-full bg-gray-100 py-6`}>
                 <p className='text-center' dangerouslySetInnerHTML={{ __html: text }} />
             </div>

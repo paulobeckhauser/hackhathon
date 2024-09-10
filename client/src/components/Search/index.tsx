@@ -13,9 +13,10 @@ import Prompt from "../Prompt";
 interface SearchProps {
     results: any;
     setResults: any;
+    setLoading: any;
 }
 
-export default function Search({ results, setResults }: SearchProps) {
+export default function Search({ results, setResults, setLoading }: SearchProps) {
     const dbApi = new DBAPI();
 
     const [fromCity, setFromCity] = useState<any>(null);
@@ -29,6 +30,13 @@ export default function Search({ results, setResults }: SearchProps) {
     const [search, setSearch] = useState<string>("");
     const [hidden, setHidden] = useState<boolean>(false);
 
+    const connections = results
+        ?.map((e: any) => {
+            const o = JSON.parse(e).verbindungen;
+            return o.length;
+        })
+        .reduce((acc: number, length: number) => acc + length, 0);
+
     useEffect(() => {
         searchCities(search);
     }, [search]);
@@ -38,21 +46,26 @@ export default function Search({ results, setResults }: SearchProps) {
     }, []);
 
     const handleSearch = async () => {
+        setLoading(true);
         const date = new Date(dates.year, dates.month - 1, dates.day, time.hour, time.minute, time.second, time.millisecond);
 
         const formattedDate = date.toISOString().replace(/\.\d{3}Z$/, "");
 
         const response = await dbApi.searchConnections(fromCity, toCity, formattedDate);
-        if (response.status != 200) return;
+        if (response.status != 200) {
+            setLoading(false);
+            return;
+        }
 
-        setResults(JSON.parse(response.data).verbindungen);
+        setResults(JSON.parse(response.data));
         setHidden(true);
+        setLoading(false);
     };
 
     const handleSearchChange = useCallback(
         debounce((value: string) => {
             setSearch(value);
-        }, 500),
+        }, 200),
         []
     );
 
@@ -80,11 +93,17 @@ export default function Search({ results, setResults }: SearchProps) {
                     <div className="flex cursor-pointer bg-gray-200 p-6 rounded-2xl">
                         <div className="">
                             <h2 className="my-auto text-xl">Search the route</h2>
-                            <small>Found <span className="font-black">{results.length}</span> connections</small>
+                            <small>
+                                Found <span className="font-black">{connections}</span> connections
+                            </small>
                         </div>
                         <div className="ml-auto">
-                            <p><span className="font-black">{fromCity.split("@")[1].substring(2)}</span></p>
-                            <p><span className="font-black">{toCity.split("@")[1].substring(2)}</span></p>
+                            <p>
+                                <span className="font-black">{fromCity.split("@")[1].substring(2)}</span>
+                            </p>
+                            <p>
+                                <span className="font-black">{toCity.split("@")[1].substring(2)}</span>
+                            </p>
                         </div>
                     </div>
                 )}
