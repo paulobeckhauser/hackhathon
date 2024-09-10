@@ -135,11 +135,13 @@ export default function Search({ results, setResults, setLoading }: SearchProps)
                                 </div>
                             </div>
                         </div>
-                        <div className="text-center mt-2 bg-gray-100 rounded-2xl p-4">
-                            <span className="font-black">Your question:</span>
-                            <br />
-                            {userPrompt}
-                        </div>
+                        {userPrompt && (
+                            <div className="text-center mt-2 bg-gray-100 rounded-2xl p-4">
+                                <span className="font-black">Your question:</span>
+                                <br />
+                                {userPrompt}
+                            </div>
+                        )}
                     </>
                 )}
                 <div className={`flex flex-col gap-2`} style={{ display: hidden ? "none" : "flex" }}>
