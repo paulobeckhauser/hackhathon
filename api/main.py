@@ -6,6 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 from db_api import *
+from lang import *
 
 # from fastapi.encoders import jsonable_encoder
 # from fastapi.responses import JSONResponse
@@ -43,15 +44,19 @@ def connectionSearch(s: ConnectionSearch):
     conns = []
     pref = None
     while len(conns) < 10:
-        con = get_conn(**s.dict(), pagingRef=pref)
+        con = get_conn(s.frm, s.to, s.datetime, pagingRef=pref)
         j = json.loads(con)
         conns.extend(j['verbindungen'])
         pref = j['verbindungReference']['later']
     if s.prompt:
+        # j = prepare_llm_json(conns)
+        # prompt_llm
         pass
+
     result = dict()
     result['verbindungen'] = conns
     result['recommended'] = 42
+    print(json.dumps(result))
     return json.dumps(result)
 
 @app.get("/citySearch/{name}")

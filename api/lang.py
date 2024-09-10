@@ -26,7 +26,7 @@ class Connection(BaseModel):
     id: str = Field(description="journey id from JSON")
 
 
-def prompt(j, s):
+def prompt_llm(j, s):
     parser = JsonOutputParser(pydantic_object=Connection)
     prompt = PromptTemplate(
         template="{sysmsg}\n\nAnswer the user query.\n{format_instructions}\n{json}\n{query}\n",
