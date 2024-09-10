@@ -9,19 +9,42 @@ class DBAPI {
     constructor() {}
 
     async getCity(city: string) {
-        const response = await axios.get(`${this._host}/citySearch/${city}`);
+        try {
+            const response = await axios.get(`${this._host}/citySearch/${city}`);
 
-        return response.data;
+            return response;
+        } catch (error: any) {
+            return error?.response || { status: 404 };
+        }
     }
 
     async searchConnections(from: string, to: string, date: string) {
-        const response = await axios.post(`${this._host}/connectionSearch`, {
-            frm: from,
-            to: to,
-            datetime: date,
-        });
+        try {
+            const response = await axios.post(`${this._host}/connectionSearch`, {
+                frm: from,
+                to: to,
+                datetime: date,
+            });
 
-        return JSON.parse(response.data);
+            return response;
+        } catch (error: any) {
+            return error?.response || { status: 404 };
+        }
+    }
+
+    async share(from: string, to: string, date: string, transferId: string) {
+        try {
+            const response = await axios.post(`${this._host}/shareCon`, {
+                frm: from,
+                to: to,
+                datetime: date,
+                tfID: transferId,
+            });
+
+            return response;
+        } catch (error: any) {
+            return error?.response || { status: 404 };
+        }
     }
 
     // async searchConnections2(from: string, to: string, date: string) {
