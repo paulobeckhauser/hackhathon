@@ -49,8 +49,8 @@ def connectionSearch(s: ConnectionSearch):
         conns.extend(j['verbindungen'])
         pref = j['verbindungReference']['later']
     if s.prompt:
-        j = prepare_llm_json(conns)
-        prompt_res = prompt_llm(j, s.prompt)
+        # j = prepare_llm_json(conns)
+        # prompt_llm
         pass
 
     result = dict()
