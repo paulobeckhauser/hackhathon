@@ -42,7 +42,7 @@ class ConnectionSearch(BaseModel):
 @app.post("/connectionSearch/")
 def connectionSearch(s: ConnectionSearch):
     pref = None
-    repsonses = []
+    responses = []
     while len(responses) < 3:
         con = get_conn(**s.dict(), pagingRef=pref)
         # j = prepare_llm_json(con)
