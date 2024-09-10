@@ -53,6 +53,7 @@ def prepare_llm_json(conns):
             price = p['angebotsPreis']['betrag']
         except:
             pass
+
         res.append({
             'id': str(id),
             'price': price,

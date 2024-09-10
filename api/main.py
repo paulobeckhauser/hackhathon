@@ -47,7 +47,10 @@ def connectionSearch(s: ConnectionSearch):
         con = get_conn(s.frm, s.to, s.datetime, pagingRef=pref)
         j = json.loads(con)
         conns.extend(j['verbindungen'])
-        pref = j['verbindungReference']['later']
+        try:
+            pref = j['verbindungReference']['later']
+        except:
+            break
     result = dict()
     if s.prompt:
         j = prepare_llm_json(conns)
