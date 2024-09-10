@@ -1,10 +1,13 @@
 from typing import Union
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Response
 from pydantic import BaseModel
 
 from db_api import *
 from fastapi.middleware.cors import CORSMiddleware
+
+from fastapi.encoders import jsonable_encoder
+from fastapi.responses import JSONResponse
 
 import json
 
@@ -47,7 +50,7 @@ def connectionSearch(s: ConnectionSearch):
         con = get_conn(**s.dict(), pagingRef=pref)
         pref = json.loads(con)['verbindungReference']['later']
         responses.append(con)
-    return json.dumps(responses)
+    return JSONResponse(content=responses)
 
 @app.get("/citySearch/{name}")
 def citySearch(name: str):
