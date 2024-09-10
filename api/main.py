@@ -23,12 +23,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-from fastapi import FastAPI
-from pydantic import BaseModel
-import json
-
-app = FastAPI()
-
 class ShareCon(BaseModel):
     frm: str
     to: str
@@ -54,14 +48,11 @@ def connectionSearch(s: ConnectionSearch):
         j = json.loads(con)
         conns.extend(j['verbindungen'])
         pref = j['verbindungReference']['later']
-    if s.prompt:
-        # j = prepare_llm_json(conns)
-        # prompt_llm
-        pass
-
     result = dict()
+    if s.prompt:
+        j = prepare_llm_json(conns)
+        result['recommended'] = prompt_llm(j, s.prompt)
     result['verbindungen'] = conns
-    result['recommended'] = 42
     print(json.dumps(result))
     return json.dumps(result)
 
