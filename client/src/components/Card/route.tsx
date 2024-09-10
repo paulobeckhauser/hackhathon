@@ -18,7 +18,7 @@ export default function TrainCard({ route, recommended }: TrainCardProps) {
     const duration = verbindungsAbschnitt?.abschnittsDauer / 60;
     const price = route?.angebotsPreis?.betrag.toFixed(2) || undefined;
 
-    const hasDelay = verbindungsAbschnitt.himMeldungen.some(
+    const hasDelay = verbindungsAbschnitt?.himMeldungen?.some(
         (meldung: any) => meldung.ueberschrift.includes("Verspätung") || meldung.text.includes("Verspätung")
     );
 
