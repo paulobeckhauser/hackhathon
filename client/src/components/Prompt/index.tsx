@@ -7,9 +7,7 @@ export default function Prompt({ onSend }: { onSend: (text: string) => void }) {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        if (text.length > 0) {
-            onSend(text);
-        }
+        onSend(text);
     };
 
     const handleKeyDown = (e: React.KeyboardEvent) => {

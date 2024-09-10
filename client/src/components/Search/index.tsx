@@ -9,6 +9,7 @@ import { Time } from "@internationalized/date";
 
 import "./styles.css";
 import Prompt from "../Prompt";
+import { I18nProvider } from "@react-aria/i18n";
 
 interface SearchProps {
     results: any;
@@ -49,6 +50,7 @@ export default function Search({ results, setResults, setLoading }: SearchProps)
         const date = new Date(dates.year, dates.month - 1, dates.day, time.hour, time.minute, time.second, time.millisecond);
 
         const formattedDate = date.toISOString().replace(/\.\d{3}Z$/, "");
+        console.log(formattedDate)
 
         const formattedPrompt = prompt + `\nUser prefered time: ${formattedDate}`;
         const response = await dbApi.searchConnections(fromCity, toCity, formattedDate, formattedPrompt);
@@ -121,11 +123,14 @@ export default function Search({ results, setResults, setLoading }: SearchProps)
                                 </small>
 
                                 <div className="flex flex-col text-red-600 text-right">
-                                    {results?.reliability && results?.reliability?.map((e: any) => (
-                                        <div className="flex gap-2 text-right ml-auto">
-                                            <p>{e.label}: <span className="font-black">{e.percent}%</span></p>
-                                        </div>
-                                    ))}
+                                    {results?.reliability &&
+                                        results?.reliability?.map((e: any) => (
+                                            <div className="flex gap-2 text-right ml-auto">
+                                                <p>
+                                                    {e.label}: <span className="font-black">{e.percent}%</span>
+                                                </p>
+                                            </div>
+                                        ))}
                                 </div>
                             </div>
                         </div>
@@ -154,12 +159,14 @@ export default function Search({ results, setResults, setLoading }: SearchProps)
                     </Select>
 
                     <div className="flex gap-2 w-full">
-                        {multipleDates ? (
-                            <DateRangePicker label="Dates" className="w-full" onChange={(e) => setDates(e)} />
-                        ) : (
-                            <DatePicker label="Date" className="w-full" onChange={(e) => setDates(e)} />
-                        )}
-                        <TimeInput label="Time" className="w-1/2 sm:w-1/3" defaultValue={time} hourCycle={24} onChange={(e) => setTime(e)} />
+                        <I18nProvider locale="en-GB">
+                            {multipleDates ? (
+                                <DateRangePicker label="Dates" className="w-full" onChange={(e) => setDates(e)} />
+                            ) : (
+                                <DatePicker label="Date" className="w-full" onChange={(e) => setDates(e)} />
+                            )}
+                            <TimeInput label="Time" className="w-1/2 sm:w-1/3" defaultValue={time} hourCycle={24} onChange={(e) => setTime(e)} />
+                        </I18nProvider>
                     </div>
 
                     <div className="flex gap-2">

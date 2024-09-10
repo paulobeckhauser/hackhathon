@@ -37,12 +37,14 @@ export default function Home() {
                 )}
 
                 {results && results.verbindungen && results.verbindungen.length > 0 && (
-                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 my-6">
+                    <>
                         <h2 className="text-center text-lg">All Offers</h2>
-                        {results?.verbindungen?.map((e: any) => {
-                            return <TrainCard route={e} />;
-                        })}
-                    </div>
+                        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 my-6">
+                            {results?.verbindungen?.map((e: any) => {
+                                return <TrainCard route={e} />;
+                            })}
+                        </div>
+                    </>
                 )}
             </main>
         </div>
