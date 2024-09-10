@@ -23,6 +23,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+from fastapi import FastAPI
+from pydantic import BaseModel
+import json
+
+app = FastAPI()
+
 class ShareCon(BaseModel):
     frm: str
     to: str

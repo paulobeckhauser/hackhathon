@@ -30,12 +30,11 @@ export default function Search({ results, setResults, setLoading }: SearchProps)
     const [search, setSearch] = useState<string>("");
     const [hidden, setHidden] = useState<boolean>(false);
 
-    const connections = results
-        ?.map((e: any) => {
-            const o = JSON.parse(e).verbindungen;
-            return o.length;
-        })
-        .reduce((acc: number, length: number) => acc + length, 0);
+    const connections = results?.map((e: any) => {
+        const o = JSON.parse(e).verbindungen;
+        return o.length;
+    }).reduce((acc:number, length:number) => acc + length, 0);
+
 
     useEffect(() => {
         searchCities(search);
@@ -45,13 +44,14 @@ export default function Search({ results, setResults, setLoading }: SearchProps)
         searchCities("Einbeck");
     }, []);
 
-    const handleSearch = async () => {
+    const handleSearch = async (prompt:string) => {
         setLoading(true);
+        setResults([]);
         const date = new Date(dates.year, dates.month - 1, dates.day, time.hour, time.minute, time.second, time.millisecond);
 
         const formattedDate = date.toISOString().replace(/\.\d{3}Z$/, "");
 
-        const response = await dbApi.searchConnections(fromCity, toCity, formattedDate);
+        const response = await dbApi.searchConnections(fromCity, toCity, formattedDate, prompt);
         if (response.status != 200) {
             setLoading(false);
             return;

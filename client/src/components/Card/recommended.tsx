@@ -1,8 +1,5 @@
-import DBAPI from "@/api";
-import { Card, Button } from "@nextui-org/react";
-import Link from "next/link";
-import { FaWalking } from "react-icons/fa";
 import TrainCard from "./route";
+import { Divider } from "antd";
 
 interface TrainCardProps {
     route: any;
@@ -11,8 +8,9 @@ interface TrainCardProps {
 export default function Recommended({ route }: TrainCardProps) {
     return (
         <div className="">
-            <h2>Recommended by Assistant: </h2>
+            <h2 className="text-center text-xl">Recommended by Assistant: </h2>
             <TrainCard route={route} />
+            <Divider className="w-full"/>
         </div>
     )
 }
