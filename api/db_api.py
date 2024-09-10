@@ -44,10 +44,10 @@ def get_conn(frm, to, datetime, pagingRef=None):
     response = requests.request("POST", url, headers=headers, data=payload)
     return response.text
 
-def prepare_llm_json(js):
+def prepare_llm_json(conns):
     res = []
     id = 0
-    for p in json.loads(js)['verbindungen']:
+    for p in conns:
         res.append({
             'id': str(id),
             'price': p['angebotsPreis']['betrag'],
