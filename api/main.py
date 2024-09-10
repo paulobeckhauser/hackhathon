@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 from db_api import *
-from lang import *
+from lang import prompt_llm
 
 # from fastapi.encoders import jsonable_encoder
 # from fastapi.responses import JSONResponse
