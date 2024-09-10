@@ -7,4 +7,4 @@ from pprint import pprint
 
 pprint(f)
 pprint(t)
-# print(get_conn(f, t, '2024-09-13T02:00:39'))
+print(get_conn(f, t, '2024-09-13T02:00:39'))

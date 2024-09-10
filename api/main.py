@@ -3,7 +3,7 @@ from typing import Union
 from fastapi import FastAPI
 from pydantic import BaseModel
 
-from db_api import get_id, get_conn
+from db_api import *
 from fastapi.middleware.cors import CORSMiddleware
 
 import json
@@ -24,6 +24,15 @@ app.add_middleware(
 def read_root():
     return {"Hello": "World"}
 
+class ShareCon(BaseModel):
+    frm: str
+    to: str
+    datetime: str
+    tfID: str
+
+@app.post("/shareCon/")
+def shareCon(s: ShareCon):
+    return share_con(**s.dict())
 
 class ConnectionSearch(BaseModel):
     frm: str
