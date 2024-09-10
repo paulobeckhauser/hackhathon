@@ -1,11 +1,16 @@
+import DBAPI from "@/api";
 import { Card, Button } from "@nextui-org/react";
 import Link from "next/link";
+import { FaWalking } from "react-icons/fa";
 
 interface TrainCardProps {
     route: any;
 }
 
 export default function TrainCard({ route }: TrainCardProps) {
+    const dbApi = new DBAPI();
+
+    const connections = route.verbindungsAbschnitte;
     const verbindungsAbschnitt = route.verbindungsAbschnitte[0];
     const abfahrtsZeitpunkt = new Date(verbindungsAbschnitt.abfahrtsZeitpunkt);
     const ankunftsZeitpunkt = new Date(verbindungsAbschnitt.ankunftsZeitpunkt);
@@ -16,9 +21,21 @@ export default function TrainCard({ route }: TrainCardProps) {
         (meldung: any) => meldung.ueberschrift.includes("Verspätung") || meldung.text.includes("Verspätung")
     );
 
+    const share = async () => {
+        console.log("Share clicked");
+
+        console.log(verbindungsAbschnitt.abfahrtsOrt, verbindungsAbschnitt.ankunftsOrt, abfahrtsZeitpunkt.toISOString(), route.ctxRecon);
+
+        const response = await dbApi.share(verbindungsAbschnitt.abfahrtsOrt, verbindungsAbschnitt.ankunftsOrt, abfahrtsZeitpunkt.toISOString(), route.ctxRecon);
+
+        const vbid = JSON.parse(response.data).vbid;
+
+        window.open(`https://www.bahn.de/buchung/start?vbid=${vbid}`, "_blank");
+    };
+
     return (
         <div className="flex justify-center items-center">
-            <Card className="w-[360px] h-[400px]">
+            <Card className="w-[360px] min-h-[400px]">
                 {/* Header Section */}
                 <div className="p-4 border-b">
                     <div className="flex justify-between">
@@ -62,12 +79,39 @@ export default function TrainCard({ route }: TrainCardProps) {
                 </div>
 
                 {/* Train Connections Section */}
-                <div className="flex p-4 space-x-2">
-                    {/* Train Badges */}
-                    <span className="flex-1 text-center bg-gray-700 text-white rounded-lg py-1 px-2 text-sm">
-                        {verbindungsAbschnitt.verkehrsmittel.kurzText} {verbindungsAbschnitt.verkehrsmittel.nummer}
-                    </span>
-                    <span className="flex-1 text-center bg-gray-500 text-white rounded-lg py-1 px-2 text-sm">RB</span>
+                <div className={`flex gap-2 p-4`}>
+                    {(() => {
+                        const totalDuration = connections.reduce((sum: number, e: any) => sum + e.abschnittsDauer, 0);
+                        const minWidth = 50;
+
+                        return connections.map((e: any, index: number) => {
+                            const color = e.verkehrsmittel.typ === "WALK" ? "bg-gray-200" : "bg-gray-600";
+                            let widthPercentage = (e.abschnittsDauer / totalDuration) * 100;
+                            const totalWidthPx = 100 * ((document.querySelector(".flex") as any)?.offsetWidth || 1); 
+                            const calculatedWidthPx = (widthPercentage / 100) * totalWidthPx;
+
+                            if (calculatedWidthPx < minWidth) {
+                                widthPercentage = (minWidth / totalWidthPx) * 100;
+                            }
+
+                            return (
+                                <div
+                                    key={index}
+                                    className={`flex items-center justify-center text-center ${color} text-white rounded-lg text-sm p-1`}
+                                    style={{ width: `${widthPercentage}%`, minWidth: `${minWidth}px` }}
+                                >
+                                    {e.verkehrsmittel.typ === "WALK" ? (
+                                        <div className="text-gray-600">
+                                            <FaWalking className="text-2xl" />
+                                            <span className="mr-1 text-xs">{e.distanz}M</span>
+                                        </div>
+                                    ) : (
+                                        <span>{e.verkehrsmittel.name}</span>
+                                    )}
+                                </div>
+                            );
+                        });
+                    })()}
                 </div>
 
                 {/* Body Section */}
@@ -93,9 +137,9 @@ export default function TrainCard({ route }: TrainCardProps) {
                 {/* Footer Section */}
                 <div className="p-4 border-t flex justify-between items-center mt-auto">
                     {price && <p className="text-lg font-semibold">ab {price} €</p>}
-                    <Link href="" target="_blank">
-                        <Button color="primary">Weiter</Button>
-                    </Link>
+                    <Button color="primary" onClick={share}>
+                        Weiter
+                    </Button>
                 </div>
             </Card>
         </div>
