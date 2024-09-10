@@ -44,8 +44,7 @@ export default function Search({ results, setResults, setLoading }: SearchProps)
     }, []);
 
     const handleSearch = async (prompt: string) => {
-        if(prompt.length > 0)
-            setUserPrompt(prompt);
+        setUserPrompt(prompt);
         setLoading(true);
         setResults([]);
         const date = new Date(dates.year, dates.month - 1, dates.day, time.hour, time.minute, time.second, time.millisecond);
