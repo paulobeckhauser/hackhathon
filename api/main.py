@@ -41,17 +41,13 @@ class ConnectionSearch(BaseModel):
 
 @app.post("/connectionSearch/")
 def connectionSearch(s: ConnectionSearch):
+    responses = []
     pref = None
-    connections = []
-    while len(connections) < 3:
+    while len(responses) < 3:
         con = get_conn(**s.dict(), pagingRef=pref)
-        # j = prepare_llm_json(con)
-        # print(j)
         pref = json.loads(con)['verbindungReference']['later']
-        connections.extend(json.loads(con)['verbindungen'])
-    result = {}
-    result['verbindungen'] = connections
-    return json.dumps(result)
+        responses.append(con)
+    return json.dumps(responses)
 
 @app.get("/citySearch/{name}")
 def citySearch(name: str):
