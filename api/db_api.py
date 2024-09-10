@@ -6,9 +6,7 @@ headers = {
   # 'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 14_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.3 Mobile/15E148 Safari/604.1',
   'Accept': 'application/json',
   'Accept-Language': 'de',
-  # 'Accept-Encoding': 'gzip, deflate, br, zstd',
   'content-type': 'application/json; charset=utf-8',
-  # 'x-correlation-id': '4822e9dd-6f3e-4ea6-93cf-bd8cbbb3cc55_48b243b2-862c-485f-b1bf-a856e8fc5deb',
   'Origin': 'https://www.bahn.de'
 }
 
@@ -18,8 +16,6 @@ def get_id_only(city):
 def get_id(city):
     url = f"https://www.bahn.de/web/api/reiseloesung/orte?suchbegriff={city}&typ=ALL&limit=10"
     response = requests.request("GET", url, headers=headers, data={})
-    # pprint(json.loads(response.text)[0]['id'])
-    #return json.loads(response.text)[0]['id']
     return response.text
 
 def share_con(frm, to, datetime, tfID):
@@ -31,14 +27,6 @@ def share_con(frm, to, datetime, tfID):
       "hinfahrtDatum": datetime,
       "hinfahrtRecon": tfID
     })
-    headers = {
-      'Accept': 'application/json',
-      'Accept-Language': 'de',
-      'Accept-Encoding': 'gzip, deflate, br, zstd',
-      'Content-Type': 'application/json',
-      'Origin': 'https://www.bahn.de',
-    }
-
     response = requests.request("POST", url, headers=headers, data=payload)
     return response.text
     # print(response.text)

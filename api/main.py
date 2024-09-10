@@ -1,15 +1,14 @@
+import json
 from typing import Union
 
 from fastapi import FastAPI, Response
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 from db_api import *
-from fastapi.middleware.cors import CORSMiddleware
 
-from fastapi.encoders import jsonable_encoder
-from fastapi.responses import JSONResponse
-
-import json
+# from fastapi.encoders import jsonable_encoder
+# from fastapi.responses import JSONResponse
 
 app = FastAPI()
 
@@ -37,16 +36,23 @@ class ConnectionSearch(BaseModel):
     frm: str
     to: str
     datetime: str
+    prompt: str
 
 @app.post("/connectionSearch/")
 def connectionSearch(s: ConnectionSearch):
-    responses = []
+    conns = []
     pref = None
-    while len(responses) < 3:
+    while len(conns) < 10:
         con = get_conn(**s.dict(), pagingRef=pref)
-        pref = json.loads(con)['verbindungReference']['later']
-        responses.append(con)
-    return json.dumps(responses)
+        j = json.loads(con)
+        conns.extend(j['verbindungen'])
+        pref = j['verbindungReference']['later']
+    if s.prompt:
+        pass
+    result = dict()
+    result['verbindungen'] = conns
+    result['recommended'] = 42
+    return json.dumps(result)
 
 @app.get("/citySearch/{name}")
 def citySearch(name: str):
