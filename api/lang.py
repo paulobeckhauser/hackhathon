@@ -29,7 +29,7 @@ class Connection(BaseModel):
 def prompt_llm(j, s):
     parser = JsonOutputParser(pydantic_object=Connection)
     prompt = PromptTemplate(
-        template="{sysmsg}\n\nAnswer the user query.\n{format_instructions}\n{json}\n{query}\n",
+        template="{sysmsg}\n\nAnswer the user query with a description in a language in ask in.\n{format_instructions}\n{json}\n{query}\n",
         input_variables=["query"],
         partial_variables={
             "format_instructions": parser.get_format_instructions(),

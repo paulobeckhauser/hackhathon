@@ -1,8 +1,12 @@
 from db_api import *
 # from sys import exit
 
-f = get_id_only("Hannover hbf")
-t = get_id_only("Berlin Hbf")
+f = get_id_only("Düsseldorf Hbf")
+t = get_id_only("Frankfurt Hbf")
+
+print(f)
+print(t)
+exit()
 
 from pprint import pprint
 import json
