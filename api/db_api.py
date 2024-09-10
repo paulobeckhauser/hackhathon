@@ -46,15 +46,39 @@ def share_con(frm, to, datetime, tfID):
     return response.text
     # print(response.text)
 
-def get_conn(frm, to, datetime):
+def get_conn(frm, to, datetime, pagingRef=None):
     url = "https://www.bahn.de/web/api/angebote/fahrplan"
     payload = "{\"abfahrtsHalt\":\"<FROM>\",\"anfrageZeitpunkt\":\"<DATE>\",\"ankunftsHalt\":\"<TO>\",\"ankunftSuche\":\"ABFAHRT\",\"klasse\":\"KLASSE_2\",\"produktgattungen\":[\"ICE\",\"EC_IC\",\"IR\",\"REGIONAL\",\"SBAHN\",\"BUS\",\"SCHIFF\",\"UBAHN\",\"TRAM\",\"ANRUFPFLICHTIG\"],\"reisende\":[{\"typ\":\"ERWACHSENER\",\"ermaessigungen\":[{\"art\":\"KEINE_ERMAESSIGUNG\",\"klasse\":\"KLASSENLOS\"}],\"alter\":[],\"anzahl\":1}],\"schnelleVerbindungen\":true,\"sitzplatzOnly\":false,\"bikeCarriage\":false,\"reservierungsKontingenteVorhanden\":false}"
-    payload = payload.replace('<FROM>', frm).replace('<TO>', to).replace("<DATE>", datetime)
+    payload_json = json.loads(payload)
+    payload_json['abfahrtsHalt'] = frm
+    payload_json['ankunftsHalt'] = to
+    payload_json['anfrageZeitpunkt'] = datetime
+    if pagingRef:
+        payload_json['pagingReference'] = pagingRef
+    # payload = payload.replace('<FROM>', frm).replace('<TO>', to).replace("<DATE>", datetime)
+    # pr = ''
+    # if pagingRef:
+    #     pr = ',pagingReference=\"' + pagingRef + '\"'
+    # payload = payload.replace('<PR>', pr)
+    payload = json.dumps(payload_json)
 
     response = requests.request("POST", url, headers=headers, data=payload)
+    # print(respose)
     return response.text
-    for p in response.json()['verbindungen']:
-        if 'angebotsPreis' in p:
-            pprint(p)
-            input()
             # pprint(p['angebotsPreis']['betrag'])
+
+def prepare_llm_json(js):
+    res = []
+    id = 0
+    for p in json.loads(js)['verbindungen']:
+        res.append({
+            'id': str(id),
+            'price': p['angebotsPreis']['betrag'],
+            'departure': p['verbindungsAbschnitte'][0]['halte'][0]['abfahrtsZeitpunkt'],
+            'transfers': p['umstiegsAnzahl'],
+            'duration': p['verbindungsDauerInSeconds'],
+            'sections': [{'from': s['abfahrtsOrt'], 'to': s['abfahrtsOrt']} for s in p['verbindungsAbschnitte']]
+        })
+        id += 1
+    # pprint(res)
+    return res
