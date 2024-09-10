@@ -3,12 +3,13 @@ import { Button, Checkbox, DatePicker, DateRangePicker, TimeInput } from "@nextu
 import { useCallback, useEffect, useState } from "react";
 
 import DBAPI from "@/api";
-import { Select } from "antd";
+import { Divider, Select } from "antd";
 import { debounce } from "@/utils/debounce";
 import { Time } from "@internationalized/date";
 
 import "./styles.css";
 import Prompt from "../Prompt";
+import { I18nProvider } from "@react-aria/i18n";
 
 interface SearchProps {
     results: any;
@@ -49,6 +50,7 @@ export default function Search({ results, setResults, setLoading }: SearchProps)
         const date = new Date(dates.year, dates.month - 1, dates.day, time.hour, time.minute, time.second, time.millisecond);
 
         const formattedDate = date.toISOString().replace(/\.\d{3}Z$/, "");
+        console.log(formattedDate)
 
         const formattedPrompt = prompt + `\nUser prefered time: ${formattedDate}`;
         const response = await dbApi.searchConnections(fromCity, toCity, formattedDate, formattedPrompt);
@@ -114,12 +116,27 @@ export default function Search({ results, setResults, setLoading }: SearchProps)
                                     </p>
                                 </div>
                             </div>
-                            <small>
-                                Found <span className="font-black">{connections}</span> connections
-                            </small>
+                            <Divider className="my-4" />
+                            <div className="flex justify-between">
+                                <small className="mt-auto">
+                                    Found <span className="font-black">{connections}</span> connections
+                                </small>
+
+                                <div className="flex flex-col text-red-600 text-right">
+                                    {results?.reliability &&
+                                        results?.reliability?.map((e: any) => (
+                                            <div className="flex gap-2 text-right ml-auto">
+                                                <p>
+                                                    {e.label}: <span className="font-black">{e.percent}%</span>
+                                                </p>
+                                            </div>
+                                        ))}
+                                </div>
+                            </div>
                         </div>
                         <div className="text-center mt-2 bg-gray-100 rounded-2xl p-4">
-                            <span className="font-black">Your question:</span><br />
+                            <span className="font-black">Your question:</span>
+                            <br />
                             {userPrompt}
                         </div>
                     </>
@@ -142,12 +159,14 @@ export default function Search({ results, setResults, setLoading }: SearchProps)
                     </Select>
 
                     <div className="flex gap-2 w-full">
-                        {multipleDates ? (
-                            <DateRangePicker label="Dates" className="w-full" onChange={(e) => setDates(e)} />
-                        ) : (
-                            <DatePicker label="Date" className="w-full" onChange={(e) => setDates(e)} />
-                        )}
-                        <TimeInput label="Time" className="w-1/2 sm:w-1/3" defaultValue={time} hourCycle={24} onChange={(e) => setTime(e)} />
+                        <I18nProvider locale="en-GB">
+                            {multipleDates ? (
+                                <DateRangePicker label="Dates" className="w-full" onChange={(e) => setDates(e)} />
+                            ) : (
+                                <DatePicker label="Date" className="w-full" onChange={(e) => setDates(e)} />
+                            )}
+                            <TimeInput label="Time" className="w-1/2 sm:w-1/3" defaultValue={time} hourCycle={24} onChange={(e) => setTime(e)} />
+                        </I18nProvider>
                     </div>
 
                     <div className="flex gap-2">
