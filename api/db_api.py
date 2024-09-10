@@ -23,9 +23,6 @@ def get_id(city):
     return response.text
 
 def share_con(frm, to, datetime, tfID):
-    import requests
-    import json
-
     url = "https://www.bahn.de/web/api/angebote/verbindung/teilen"
 
     payload = json.dumps({
@@ -55,17 +52,9 @@ def get_conn(frm, to, datetime, pagingRef=None):
     payload_json['anfrageZeitpunkt'] = datetime
     if pagingRef:
         payload_json['pagingReference'] = pagingRef
-    # payload = payload.replace('<FROM>', frm).replace('<TO>', to).replace("<DATE>", datetime)
-    # pr = ''
-    # if pagingRef:
-    #     pr = ',pagingReference=\"' + pagingRef + '\"'
-    # payload = payload.replace('<PR>', pr)
     payload = json.dumps(payload_json)
-
     response = requests.request("POST", url, headers=headers, data=payload)
-    # print(respose)
     return response.text
-            # pprint(p['angebotsPreis']['betrag'])
 
 def prepare_llm_json(js):
     res = []

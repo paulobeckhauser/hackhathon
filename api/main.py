@@ -23,10 +23,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.get("/")
-def read_root():
-    return {"Hello": "World"}
-
 class ShareCon(BaseModel):
     frm: str
     to: str
@@ -35,7 +31,7 @@ class ShareCon(BaseModel):
 
 @app.post("/shareCon/")
 def shareCon(s: ShareCon):
-    return share_con(**s.dict())
+    return JSONResponse(content=share_con(**s.dict()))
 
 class ConnectionSearch(BaseModel):
     frm: str

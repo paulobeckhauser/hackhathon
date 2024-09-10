@@ -35,4 +35,3 @@ for i in j:
     if i['id'] == res['id']:
         print(i)
         print(res['description'])
-# print(share_con(f, t, '2024-09-13T02:43:00', tid))
