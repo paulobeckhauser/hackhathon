@@ -10,8 +10,6 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "csv-writer": "^1.6.0",
-    "escape-html": "^1.0.3",
-    "html-to-text": "^9.0.5"
+    "csv-writer": "^1.6.0"
   }
 }
