@@ -1,5 +1,6 @@
 fastapi[standard]
 requests
 langchain
+pydantic
 langchain-openai
 python-dotenv

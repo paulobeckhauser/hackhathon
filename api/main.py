@@ -43,7 +43,7 @@ class ConnectionSearch(BaseModel):
 def connectionSearch(s: ConnectionSearch):
     conns = []
     pref = None
-    while len(conns) < 10:
+    while len(conns) < 30:
         con = get_conn(s.frm, s.to, s.datetime, pagingRef=pref)
         j = json.loads(con)
         conns.extend(j['verbindungen'])
